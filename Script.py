@@ -1,12 +1,12 @@
 class script(object):
     START_TXT = """<b><blockquote><i>‣ Hᴇʟʟᴏ {}</i></blockquote>
 <i><blockquote>I ᴀᴍ Lᴀᴛᴇsᴛ Aᴅᴠᴀɴᴄᴇᴅ Fɪʟᴛᴇʀ Bᴏᴛ.
-Cᴏᴅᴇᴅ & Dᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ <a href='https://t.me/MyselfNeon'>NᴇᴏɴAɴᴜʀᴀɢ</a>.
+Cᴏᴅᴇᴅ & Dᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ <a href='https://t.me/TheOrviz>TʜᴇOʀᴠɪᴢ</a>.
 I ᴄᴀɴ Fɪʟᴛᴇʀ & Sᴇɴᴅ Mᴏᴠɪᴇs / Aɴɪᴍᴇs Fɪʟᴇs Aᴅᴅᴇᴅ ᴛᴏ ᴍʏ Dᴀᴛᴀʙᴀsᴇ !!</blockquote></i></b>"""
 
     CLONE_START_TXT = """<b><blockquote><i>‣ Hᴇʟʟᴏ {}</i></blockquote>
 <i><blockquote>I am Latest Advanced Filter Bot.
-Coded & Developed by <a href='https://t.me/MyselfNeon'>NeonAnurag</a>.
+Coded & Developed by <a href='https://t.me/TheOrviz>TʜᴇOʀᴠɪᴢ</a>.
 You can create you own Clone Bot and use it in your own channel. It will Filter and Send Movies/Animes files added to its Database !!</blockquote></i></b>"""
     
     HELP_TXT = """<blockquote><b>😎 <i>Hᴇʟʟᴏ {} 
@@ -15,7 +15,7 @@ Hᴇʀᴇ Aʀᴇ Mʏ Usᴇғᴜʟ Fᴇᴀᴛᴜʀᴇs</i> 🤗</b></blockquote>"
     ABOUT_TXT = """<b><blockquote>‣ 📝 𝐌𝐘 𝐃𝐄𝐓𝐀𝐈𝐋𝐒</blockquote>    
 <i>• Mʏ Nᴀᴍᴇ : <a href=https://t.me/{}>{}</a>
 • Mʏ Bᴇsᴛ Fʀɪᴇɴᴅ : <a href='tg://settings'>Tʜɪs Sᴡᴇᴇᴛɪᴇ ❤️</a> 
-• Dᴇᴠᴇʟᴏᴘᴇʀ : <a href={}>@MʏsᴇʟғNᴇᴏɴ</a> 
+• Dᴇᴠᴇʟᴏᴘᴇʀ : <a href={}>@TʜᴇOʀᴠɪᴢ</a> 
 • Lɪʙʀᴀʀʏ : <a href='https://docs.pyrogram.org/'>Pʏʀᴏɢʀᴀᴍ</a> 
 • Lᴀɴɢᴜᴀɢᴇ : <a href='https://www.python.org/download/releases/3.0/'>Pʏᴛʜᴏɴ 𝟹</a> 
 • DᴀᴛᴀBᴀsᴇ : <a href='https://www.mongodb.com/'>Mᴏɴɢᴏ DB</a> 
@@ -51,7 +51,7 @@ If {} unique user start the Bot with your referal link then you will Automatical
 
 Buy paid plan by - /plan
 
-@NeonFiles</i></b></blockquote>"""
+@TheOrviX</i></b></blockquote>"""
 
     MANUELFILTER_TXT = """<blockquote><b><i>‣ Filters</i></b></blockquote>
 <b><i>Filter is a feature where users can set Automated replies for a perticular keyword and i will respond whenever a keyword is found in Message.</i></b>
@@ -72,7 +72,7 @@ Buy paid plan by - /plan
 2. This Bot supports buttons with any telegram media type
 3. Buttons should be properly parsed as Markdown format</i></b>
 <blockquote><b><i>‣ URL Buttons</i></b></blockquote>
-<b><i>[Button Text](buttonurl:https://t.me/NeonFiles)</i></b>
+<b><i>[Button Text](buttonurl:https://t.me/TheOrviX)</i></b>
 <blockquote><b><i>‣ Alert Buttons</i></b></blockquote>
 <b><i>[Button Text](buttonalert:This is an Alert Message)</i></b>"""
 
@@ -101,7 +101,7 @@ Buy paid plan by - /plan
 
     EXTRAMOD_TXT = """<blockquote><i><b>‣ Extra Modules</b></i></blockquote>
 <blockquote><b><i>Maintained by <a href={}>NeonAnurag 💖</a></i></b> 
-<b><i>Powered By @NeonFiles</i> 🔥</b></blockquote>
+<b><i>Powered By @TheOrviX</i> 🔥</b></blockquote>
   
 <i>/id - <b>Get ID of specified User</b> 
 /info  - <b>Get information about a user</b>
