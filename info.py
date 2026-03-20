@@ -75,7 +75,7 @@ DATABASE_URI = environ.get('DATABASE_URI', "")
 DATABASE_NAME = environ.get('DATABASE_NAME', "NeonFilter")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'neoncollection')
 
-MULTIPLE_DATABASE = bool(environ.get('MULTIPLE_DATABASE', False))
+MULTIPLE_DATABASE = bool(environ.get('MULTIPLE_DATABASE', True))
 
 # --- Separate DBs ---
 O_DB_URI = environ.get('O_DB_URI', "")
@@ -104,7 +104,7 @@ PAYMENT_TEXT = environ.get(
     '<i>• No Need To Verify\n• No Need To Open Links\n• Direct Files\n• Ad-Free Experience\n'
     '• High Speed Download\n• Multiplayer Streaming Links\n• Unlimited Movies, Animes & Series\n'
     '• 24×7 Admin Support\n• Requests Will Be Completed Within 01 Hour Of Submission If Available</i>\n\n'
-    '<blockquote>‣ 𝐔𝐏𝐈 𝐈𝐃 🆔</blockquote> - <code>neonan23@ibl</code>\n\n'
+    '<blockquote>‣ 𝐔𝐏𝐈 𝐈𝐃 🆔</blockquote> - <code>luciferjaat@ptyes</code>\n\n'
     '<i>• Click /myplan To Check Your Plan\n• Send Screenshots After Payment\n'
     '• After Sending Screenshot Give Us Some Time To Add You In Premium</i></b>'
 )
@@ -116,9 +116,9 @@ PUBLIC_FILE_CHANNEL = environ.get('PUBLIC_FILE_CHANNEL', 'NeonCodes')
 
 # --- LINKS --- 
 GRP_LNK = environ.get('GRP_LNK', '')
-CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/neonfiles')
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'Talk2neonBot')
-OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/MyselfNeon')
+CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/TheOrviX')
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'TheOrviZ')
+OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/TheOrviz')
 
 # --- FEATURES ---
 AI_SPELL_CHECK = bool(environ.get('AI_SPELL_CHECK', True))
@@ -126,7 +126,7 @@ PM_SEARCH = bool(environ.get('PM_SEARCH', True))
 BUTTON_MODE = bool(environ.get('BUTTON_MODE', True))
 MAX_BTN = bool(environ.get('MAX_BTN', True))
 IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', False))
-IMDB = bool(environ.get('IMDB', False))
+IMDB = bool(environ.get('IMDB', True))
 AUTO_FFILTER = bool(environ.get('AUTO_FFILTER', True))
 AUTO_DELETE = bool(environ.get('AUTO_DELETE', True))
 LONG_IMDB_DESCRIPTION = bool(environ.get("LONG_IMDB_DESCRIPTION", False))
@@ -134,7 +134,7 @@ SPELL_CHECK_REPLY = bool(environ.get("SPELL_CHECK_REPLY", True))
 MELCOW_NEW_USERS = bool(environ.get('MELCOW_NEW_USERS', True))
 PROTECT_CONTENT = bool(environ.get('PROTECT_CONTENT', False))
 PUBLIC_FILE_STORE = bool(environ.get('PUBLIC_FILE_STORE', True))
-NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", False))
+NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", True))
 USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', True))
 
 # --- TOKEN VERIFICATIONS --- 
@@ -157,7 +157,7 @@ TUTORIAL = environ.get('TUTORIAL', '')
 CACHE_TIME = int(environ.get('CACHE_TIME', 1800))
 MAX_B_TN = environ.get("MAX_B_TN", "5")
 PORT = environ.get("PORT", "8080")
-MSG_ALRT = environ.get('MSG_ALRT', 'Powered by @NeonFiles ❤️✨')
+MSG_ALRT = environ.get('MSG_ALRT', 'Powered by @TheOrviX ❤️✨')
 
 CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", f"{script.CAPTION}")
 BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
