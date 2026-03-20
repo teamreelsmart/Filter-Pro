@@ -21,7 +21,7 @@ async def root_route_handler(request):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@MyselfNeon</title>
+  <title>@TheOrviX</title>
   <style>
     body {
       background-color: black;
@@ -91,9 +91,9 @@ async def root_route_handler(request):
   <!-- Added avatar -->
   <img class="avatar" src="https://avatars.githubusercontent.com/u/194442566?v=4">
 
-  <a href="https://t.me/ZeroFilterBot" target="_blank">
-    <h1>ZeroFilter-Bot</h1>
-    <h2>Coded By @MyselfNeon</h2>
+  <a href="https://t.me/TheOrviX" target="_blank">
+    <h1>TheOrviX</h1>
+    <h2>Coded By @TheOrviz</h2>
   </a>
 
 </body>
