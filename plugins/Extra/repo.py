@@ -92,7 +92,7 @@ def generate_repo_text(repo_data):
 <b>🍴 <i>Fᴏʀᴋs : {forks}</i></b>
 <b>🐞 <i>Oᴘᴇɴ Issᴜᴇs : {issues}</i></b>
 
-<b>🔥 <i>Bᴏᴛ Pᴏᴡᴇʀᴇᴅ Bʏ : <a href="{CHNL_LNK}">@NeonFiles</a></i></b>
+<b>🔥 <i>Bᴏᴛ Pᴏᴡᴇʀᴇᴅ Bʏ : <a href="{CHNL_LNK}">@TheOrviX</a></i></b>
 """
 
     if repo_data.get("description"):
