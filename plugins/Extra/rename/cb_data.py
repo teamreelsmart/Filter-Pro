@@ -114,7 +114,7 @@ async def doc(bot, update):
                     message=file,
                     file_name=download_path,
                     progress=progress_for_pyrogram,
-                    progress_args=("**__Please Wait... 😇😍 \n\nServers are Renaming the Files you've provided | by @NeonFiles__ 🔥✨**", ms, c_time))
+                    progress_args=("**__Please Wait... 😇😍 \n\nServers are Renaming the Files you've provided | by @TheOrviX🔥✨**", ms, c_time))
         except Exception as e:
             await ms.edit(f"❌ **Download Failed:** {e}")
             return 
