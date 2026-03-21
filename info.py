@@ -115,7 +115,7 @@ CLONE_DATABASE_URI = environ.get('CLONE_DATABASE_URI', "")
 PUBLIC_FILE_CHANNEL = environ.get('PUBLIC_FILE_CHANNEL', 'NeonCodes')
 
 # --- LINKS --- 
-GRP_LNK = environ.get('GRP_LNK', '')
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+6Pw3G0sBFVpkMmY1')
 CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/TheOrviX')
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'TheOrviZ')
 OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/TheOrviz')
