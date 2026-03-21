@@ -184,7 +184,7 @@ SLEEP_THRESHOLD = int(environ.get('SLEEP_THRESHOLD', '60'))
 PING_INTERVAL = int(environ.get("PING_INTERVAL", "1200"))
 
 ON_HEROKU = 'DYNO' in environ
-URL = environ.get("URL", "")
+URL = environ.get("URL", "https://filter-pro-lmh1.onrender.com")
 
 # --- RENAME ---
 RENAME_MODE = bool(environ.get('RENAME_MODE', True))
