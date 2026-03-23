@@ -18,16 +18,16 @@ KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "")
 PICS = (
     environ.get(
         'PICS',
-        'https://i.ibb.co/239nyGYx/photo-2026-03-23-12-39-37-7620429807502753816.jpg'
-'https://i.ibb.co/NnKPTkzC/photo-2026-03-23-12-38-38-7620429558394650640.jpg'
-'https://i.ibb.co/WvpXq83j/photo-2026-03-23-12-38-21-7620429481085239312.jpg'
-'https://i.ibb.co/k6QP911H/photo-2026-03-23-12-38-11-7620429442430533652.jpg'
-'https://i.ibb.co/dwv40j12/photo-2026-03-23-12-37-56-7620429373711056912.jpg'
-'https://i.ibb.co/YTBLGC1c/photo-2026-03-23-12-37-39-7620429300696612880.jpg'
-'https://i.ibb.co/7xfGtW6m/photo-2026-03-23-12-37-24-7620429240567070736.jpg'
-'https://i.ibb.co/dwj4bc57/photo-2026-03-23-12-37-09-7620429171847594000.jpg'
-'https://i.ibb.co/v4FHq3wW/photo-2026-03-23-12-35-27-7620428733760929808.jpg'
-'https://i.ibb.co/zhN4cTMg/photo-2026-03-23-12-35-14-7620428682221322256.jpg'
+        'https://i.ibb.co/p6fFQd6s/9fe739e8e4b3.jpg'
+'https://i.ibb.co/Qj9hH6Q8/23f690b7b78a.jpg'
+'https://i.ibb.co/5g5CRjfZ/8d44cf1ece82.jpg'
+'https://i.ibb.co/gMB4sBtX/040336840f17.jpg'
+'https://i.ibb.co/PGBjn30q/5ce6514cb172.jpg'
+'https://i.ibb.co/PZfTYDST/22e06b6434e2.jpg'
+'https://i.ibb.co/pjgy1c7n/cddf473f0f8a.jpg'
+'https://i.ibb.co/KjDZx7Lc/14f11c155844.jpg'
+'https://i.ibb.co/4RPXTMqF/a850bbb9948e.jpg'
+'https://i.ibb.co/4Rs3QSNB/8372c02de966.jpg'
     )
 ).split()
 
