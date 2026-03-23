@@ -1,12 +1,12 @@
 class script(object):
     START_TXT = """<b><blockquote><i>‣ Hᴇʟʟᴏ {}</i></blockquote>
 <i><blockquote>I ᴀᴍ Lᴀᴛᴇsᴛ Aᴅᴠᴀɴᴄᴇᴅ Fɪʟᴛᴇʀ Bᴏᴛ.
-Cᴏᴅᴇᴅ & Dᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ <a href='https://t.me/TheOrviz>TʜᴇOʀᴠɪᴢ</a>.
+Cᴏᴅᴇᴅ & Dᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ <a href='https://t.me/TheOrviz'>TʜᴇOʀᴠɪᴢ</a>.
 I ᴄᴀɴ Fɪʟᴛᴇʀ & Sᴇɴᴅ Mᴏᴠɪᴇs / Aɴɪᴍᴇs Fɪʟᴇs Aᴅᴅᴇᴅ ᴛᴏ ᴍʏ Dᴀᴛᴀʙᴀsᴇ !!</blockquote></i></b>"""
 
     CLONE_START_TXT = """<b><blockquote><i>‣ Hᴇʟʟᴏ {}</i></blockquote>
 <i><blockquote>I am Latest Advanced Filter Bot.
-Coded & Developed by <a href='https://t.me/TheOrviz>TʜᴇOʀᴠɪᴢ</a>.
+Coded & Developed by <a href='https://t.me/TheOrviz'>TʜᴇOʀᴠɪᴢ</a>.
 You can create you own Clone Bot and use it in your own channel. It will Filter and Send Movies/Animes files added to its Database !!</blockquote></i></b>"""
     
     HELP_TXT = """<blockquote><b>😎 <i>Hᴇʟʟᴏ {} 
