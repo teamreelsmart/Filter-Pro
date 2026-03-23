@@ -18,12 +18,16 @@ KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "")
 PICS = (
     environ.get(
         'PICS',
-        'https://files.catbox.moe/ybg6gw.jpg '
-        'https://files.catbox.moe/b5a3dz.jpg '
-        'https://files.catbox.moe/n0xw7h.jpg '
-        'https://files.catbox.moe/fhexii.jpg '
-        'https://files.catbox.moe/v7w8co.jpg '
-        'https://files.catbox.moe/r946bu.jpg'
+        'https://i.ibb.co/239nyGYx/photo-2026-03-23-12-39-37-7620429807502753816.jpg'
+'https://i.ibb.co/NnKPTkzC/photo-2026-03-23-12-38-38-7620429558394650640.jpg'
+'https://i.ibb.co/WvpXq83j/photo-2026-03-23-12-38-21-7620429481085239312.jpg'
+'https://i.ibb.co/k6QP911H/photo-2026-03-23-12-38-11-7620429442430533652.jpg'
+'https://i.ibb.co/dwv40j12/photo-2026-03-23-12-37-56-7620429373711056912.jpg'
+'https://i.ibb.co/YTBLGC1c/photo-2026-03-23-12-37-39-7620429300696612880.jpg'
+'https://i.ibb.co/7xfGtW6m/photo-2026-03-23-12-37-24-7620429240567070736.jpg'
+'https://i.ibb.co/dwj4bc57/photo-2026-03-23-12-37-09-7620429171847594000.jpg'
+'https://i.ibb.co/v4FHq3wW/photo-2026-03-23-12-35-27-7620428733760929808.jpg'
+'https://i.ibb.co/zhN4cTMg/photo-2026-03-23-12-35-14-7620428682221322256.jpg'
     )
 ).split()
 
