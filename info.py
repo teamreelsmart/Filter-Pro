@@ -16,12 +16,15 @@ KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "")
 
 # --- START PICTURES --- 
 PICS = (
+PICS = (
     environ.get(
         'PICS',
-        'https://files.catbox.moe/0h30cy.jpg'
-     'https://files.catbox.moe/js9ipn.jpg'
-     'https://files.catbox.moe/1wvznq.jpg'
-     'https://files.catbox.moe/9n8cop.jpg'
+        'https://files.catbox.moe/9n8cop.jpg '
+        'https://files.catbox.moe/1wvznq.jpg '
+        'https://files.catbox.moe/js9ipn.jpg '
+        'https://files.catbox.moe/0h30cy.jpg '
+        'https://files.catbox.moe/1av1pi.jpg '
+        'https://files.catbox.moe/ky3rca.jpg'
     )
 ).split()
 
