@@ -16,7 +16,6 @@ KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "")
 
 # --- START PICTURES --- 
 PICS = (
-PICS = (
     environ.get(
         'PICS',
         'https://files.catbox.moe/9n8cop.jpg '
