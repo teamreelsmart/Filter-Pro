@@ -100,7 +100,7 @@ Buy paid plan by - /plan
 • /connections - List of all connections</i></b>"""
 
     EXTRAMOD_TXT = """<blockquote><i><b>‣ Extra Modules</b></i></blockquote>
-<blockquote><b><i>Maintained by <a href={}>NeonAnurag 💖</a></i></b> 
+<blockquote><b><i>Maintained by <a href={}>TheOrviZ 💖</a></i></b> 
 <b><i>Powered By @TheOrviX</i> 🔥</b></blockquote>
   
 <i>/id - <b>Get ID of specified User</b> 
