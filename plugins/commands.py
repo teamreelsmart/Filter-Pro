@@ -29,15 +29,23 @@ async def _is_user_limit_reached(user_id: int):
 
 
 async def _send_verify_or_premium_prompt(client, message):
+    lang = await db.get_user_language(message.from_user.id)
     btn = [[
         InlineKeyboardButton("✅ Verify", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start=")),
         InlineKeyboardButton("💎 Buy Premium (/plan)", callback_data="buy_premium")
     ]]
-    text = (
-        "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜʀ ғʀᴇᴇ ᴅᴀɪʟʏ ʟɪᴍɪᴛ ɪs ᴏᴠᴇʀ.\n"
-        "ᴘʟᴇᴀsᴇ ᴠᴇʀɪғʏ ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ ᴏʀ ʙᴜʏ ᴘʀᴇᴍɪᴜᴍ.</b>"
-    )
-    text += "<b>\n\n💶 Premium ke liye /plan send karo.</b>"
+    if lang == "hi":
+        text = (
+            "<b>हेलो {} 👋,\n\nआपकी आज की फ्री लिमिट खत्म हो गई है।\n"
+            "आगे फाइल लेने के लिए Verify करें या Premium लें।</b>"
+        )
+        text += "<b>\n\n💶 Premium लेने के लिए /plan भेजें।</b>"
+    else:
+        text = (
+            "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜʀ ғʀᴇᴇ ᴅᴀɪʟʏ ʟɪᴍɪᴛ ɪs ᴏᴠᴇʀ.\n"
+            "ᴘʟᴇᴀsᴇ ᴠᴇʀɪғʏ ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ ᴏʀ ʙᴜʏ ᴘʀᴇᴍɪᴜᴍ.</b>"
+        )
+        text += "<b>\n\n💶 Send /plan to buy premium.</b>"
     await message.reply_text(
         text=text.format(message.from_user.mention),
         protect_content=True,
@@ -1125,7 +1133,7 @@ async def language_toggle_cmd(client, message):
     next_lang = "hi" if current == "en" else "en"
     await db.set_user_language(user_id, next_lang)
     if next_lang == "hi":
-        await message.reply_text("✅ भाषा हिंदी में सेट हो गई है।")
+        await message.reply_text("✅ भाषा हिंदी में सेट हो गई है। अब फीचर से जुड़े मैसेज हिंदी में मिलेंगे।")
     else:
         await message.reply_text("✅ Language changed to English.")
 
