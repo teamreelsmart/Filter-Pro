@@ -19,6 +19,33 @@ logger = logging.getLogger(__name__)
 BATCH_FILES = {}
 join_db = JoinReqs
 
+
+async def _is_user_limit_reached(user_id: int):
+    if await db.has_premium_access(user_id):
+        return False
+    daily_limit = await db.get_daily_limit()
+    daily_used = await db.get_user_daily_usage(user_id)
+    return daily_used >= daily_limit
+
+
+async def _send_verify_or_premium_prompt(client, message):
+    btn = [[
+        InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start="))
+    ], [
+        InlineKeyboardButton("ʜᴏᴡ ᴛᴏ ᴠᴇʀɪғʏ", url=VERIFY_TUTORIAL)
+    ]]
+    text = (
+        "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜʀ ғʀᴇᴇ ᴅᴀɪʟʏ ʟɪᴍɪᴛ ɪs ᴏᴠᴇʀ.\n"
+        "ᴘʟᴇᴀsᴇ ᴠᴇʀɪғʏ ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ ᴏʀ ʙᴜʏ ᴘʀᴇᴍɪᴜᴍ.</b>"
+    )
+    if PREMIUM_AND_REFERAL_MODE == True:
+        text += "<b>\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
+    await message.reply_text(
+        text=text.format(message.from_user.mention),
+        protect_content=True,
+        reply_markup=InlineKeyboardMarkup(btn)
+    )
+
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
     try:
@@ -473,21 +500,9 @@ async def start(client, message):
                     f_caption=f_caption
             if f_caption is None:
                 f_caption = f"{' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files1['file_name'].split()))}"
-            if not await db.has_premium_access(message.from_user.id):
-                if not await check_verification(client, message.from_user.id) and VERIFY == True:
-                    btn = [[
-                        InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start="))
-                    ],[
-                        InlineKeyboardButton("ʜᴏᴡ ᴛᴏ ᴠᴇʀɪғʏ", url=VERIFY_TUTORIAL)
-                    ]]
-                    text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴅᴀʏ, ᴘʟᴇᴀꜱᴇ ᴄʟɪᴄᴋ ᴏɴ ᴠᴇʀɪғʏ & ɢᴇᴛ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ғᴏʀ ᴛᴏᴅᴀʏ</b>"
-                    if PREMIUM_AND_REFERAL_MODE == True:
-                        text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
-                    await message.reply_text(
-                        text=text.format(message.from_user.mention),
-                        protect_content=True,
-                        reply_markup=InlineKeyboardMarkup(btn)
-                    )
+            if VERIFY == True and await _is_user_limit_reached(message.from_user.id):
+                if not await check_verification(client, message.from_user.id):
+                    await _send_verify_or_premium_prompt(client, message)
                     return
             if STREAM_MODE == True:
                 button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
@@ -501,6 +516,9 @@ async def start(client, message):
                 protect_content=True if pre == 'allfilesp' else False,
                 reply_markup=reply_markup
             )
+            if not await db.has_premium_access(message.from_user.id):
+                if not await check_verification(client, message.from_user.id):
+                    await db.increment_user_daily_usage(message.from_user.id)
             filesarr.append(msg)
         k = await client.send_message(chat_id = message.from_user.id, text=f"<blockquote><b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nᴛʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ <b><u>10 mins</u> 🫥 <i></b>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)</i>.\n\n<b><i>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.</i></b></blockquote>")
         await asyncio.sleep(600)
@@ -536,21 +554,9 @@ async def start(client, message):
     if not files_:
         pre, file_id = ((base64.urlsafe_b64decode(data + "=" * (-len(data) % 4))).decode("ascii")).split("_", 1)
         try:
-            if not await db.has_premium_access(message.from_user.id):
-                if not await check_verification(client, message.from_user.id) and VERIFY == True:
-                    btn = [[
-                        InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start="))
-                    ],[
-                        InlineKeyboardButton("ʜᴏᴡ ᴛᴏ ᴠᴇʀɪғʏ", url=VERIFY_TUTORIAL)
-                    ]]
-                    text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴅᴀʏ, ᴘʟᴇᴀꜱᴇ ᴄʟɪᴄᴋ ᴏɴ ᴠᴇʀɪғʏ & ɢᴇᴛ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ғᴏʀ ᴛᴏᴅᴀʏ</b>"
-                    if PREMIUM_AND_REFERAL_MODE == True:
-                        text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
-                    await message.reply_text(
-                        text=text.format(message.from_user.mention),
-                        protect_content=True,
-                        reply_markup=InlineKeyboardMarkup(btn)
-                    )
+            if VERIFY == True and await _is_user_limit_reached(message.from_user.id):
+                if not await check_verification(client, message.from_user.id):
+                    await _send_verify_or_premium_prompt(client, message)
                     return
             if STREAM_MODE == True:
                 button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
@@ -563,6 +569,9 @@ async def start(client, message):
                 protect_content=True if pre == 'filep' else False,
                 reply_markup=reply_markup
             )
+            if not await db.has_premium_access(message.from_user.id):
+                if not await check_verification(client, message.from_user.id):
+                    await db.increment_user_daily_usage(message.from_user.id)
             filetype = msg.media
             file = getattr(msg, filetype.value)
             title = file.file_name
@@ -594,21 +603,9 @@ async def start(client, message):
             f_caption=f_caption
     if f_caption is None:
         f_caption = f"{' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files['file_name'].split()))}"
-    if not await db.has_premium_access(message.from_user.id):
-        if not await check_verification(client, message.from_user.id) and VERIFY == True:
-            btn = [[
-                InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start="))
-            ],[
-                InlineKeyboardButton("ʜᴏᴡ ᴛᴏ ᴠᴇʀɪғʏ", url=VERIFY_TUTORIAL)
-            ]]
-            text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴅᴀʏ, ᴘʟᴇᴀꜱᴇ ᴄʟɪᴄᴋ ᴏɴ ᴠᴇʀɪғʏ & ɢᴇᴛ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ғᴏʀ ᴛᴏᴅᴀʏ</b>"
-            if PREMIUM_AND_REFERAL_MODE == True:
-                text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
-            await message.reply_text(
-                text=text.format(message.from_user.mention),
-                protect_content=True,
-                reply_markup=InlineKeyboardMarkup(btn)
-            )
+    if VERIFY == True and await _is_user_limit_reached(message.from_user.id):
+        if not await check_verification(client, message.from_user.id):
+            await _send_verify_or_premium_prompt(client, message)
             return
     if STREAM_MODE == True:
         button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
@@ -622,6 +619,9 @@ async def start(client, message):
         protect_content=True if pre == 'filep' else False,
         reply_markup=reply_markup
     )
+    if not await db.has_premium_access(message.from_user.id):
+        if not await check_verification(client, message.from_user.id):
+            await db.increment_user_daily_usage(message.from_user.id)
     btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
     k = await msg.reply(text=f"<blockquote><b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nᴛʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ <b><u>10 mins</u> 🫥 <i></b>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)</i>.\n\n<b><i>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.</i></b></blockquote>")
     await asyncio.sleep(600)
@@ -1062,6 +1062,75 @@ async def send_msg(bot, message):
     else:
         await message.reply_text("<b>Use this command as a reply to any message using the target chat id. For eg: /send userid</b>")
 
+
+@Client.on_message(filters.command("set_limit") & filters.user(ADMINS))
+async def set_daily_limit_cmd(client, message):
+    if len(message.command) != 2:
+        return await message.reply_text("<b>Usage: /set_limit 28</b>")
+    try:
+        new_limit = int(message.command[1])
+        if new_limit < 0:
+            return await message.reply_text("<b>Limit must be 0 or greater.</b>")
+    except ValueError:
+        return await message.reply_text("<b>Limit must be a number.</b>")
+    await db.set_daily_limit(new_limit)
+    await message.reply_text(f"<b>Daily free file limit set to: {new_limit}</b>")
+
+
+@Client.on_message(filters.command("resetlimit") & filters.user(ADMINS))
+async def reset_limit_cmd(client, message):
+    if len(message.command) != 2:
+        return await message.reply_text("<b>Usage: /resetlimit user_id</b>")
+    try:
+        target_id = int(message.command[1])
+    except ValueError:
+        return await message.reply_text("<b>Invalid user id.</b>")
+    await db.reset_user_daily_usage(target_id)
+    await message.reply_text(f"<b>Daily limit usage reset for <code>{target_id}</code>.</b>")
+
+
+@Client.on_message(filters.command("full_limit") & filters.user(ADMINS))
+async def full_limit_cmd(client, message):
+    if len(message.command) != 2:
+        return await message.reply_text("<b>Usage: /full_limit user_id</b>")
+    try:
+        target_id = int(message.command[1])
+    except ValueError:
+        return await message.reply_text("<b>Invalid user id.</b>")
+    await db.full_user_daily_usage(target_id)
+    limit_value = await db.get_daily_limit()
+    await message.reply_text(
+        f"<b>User <code>{target_id}</code> marked full used ({limit_value}/{limit_value}).</b>"
+    )
+
+
+@Client.on_message(filters.command("get_limits") & filters.user(ADMINS))
+async def get_limits_cmd(client, message):
+    all_limits = await db.get_all_users_limits()
+    if not all_limits:
+        return await message.reply_text("<b>No users found.</b>")
+    lines = ["<b>All Users Daily Usage (IST reset 12:00 AM):</b>\n"]
+    for user in all_limits:
+        lines.append(
+            f"<code>{user['id']}</code> | {user['name']} | {user['used']}/{user['limit']}"
+        )
+    text = "\n".join(lines)
+    if len(text) > 4000:
+        text = text[:3900] + "\n..."
+    await message.reply_text(text)
+
+
+@Client.on_message(filters.command("language") & filters.private)
+async def language_toggle_cmd(client, message):
+    user_id = message.from_user.id
+    current = await db.get_user_language(user_id)
+    next_lang = "hi" if current == "en" else "en"
+    await db.set_user_language(user_id, next_lang)
+    if next_lang == "hi":
+        await message.reply_text("✅ भाषा हिंदी में सेट हो गई है।")
+    else:
+        await message.reply_text("✅ Language changed to English.")
+
 @Client.on_message(filters.command("deletefiles") & filters.user(ADMINS))
 async def deletemultiplefiles(bot, message):
     chat_type = message.chat.type
@@ -1394,11 +1463,21 @@ async def plans_cmd_handler(client, message):
 async def check_plans_cmd(client, message):
     if PREMIUM_AND_REFERAL_MODE == False:
         return 
-    user_id  = message.from_user.id
-    if await db.has_premium_access(user_id):         
+    user_id = message.from_user.id
+    lang = await db.get_user_language(user_id)
+    daily_limit = await db.get_daily_limit()
+    daily_used = await db.get_user_daily_usage(user_id)
+    if await db.has_premium_access(user_id):
         remaining_time = await db.check_remaining_uasge(user_id)             
         expiry_time = remaining_time + datetime.datetime.now()
-        await message.reply_text(f"**__Your plans Details are 📑🎊\n\nRemaining Time 🛜 : \n{remaining_time}\n\nExpirytime 🦠 : \n{expiry_time}__**")
+        if lang == "hi":
+            await message.reply_text(
+                f"**__आपका प्लान डिटेल्स 📑🎊\n\nबचा हुआ समय 🛜:\n{remaining_time}\n\nExpiry Time 🦠:\n{expiry_time}\n\nDaily Free Usage:\n{daily_used}/{daily_limit} (IST 12:00 AM रीसेट)__**"
+            )
+        else:
+            await message.reply_text(
+                f"**__Your plan details 📑🎊\n\nRemaining Time 🛜:\n{remaining_time}\n\nExpiry Time 🦠:\n{expiry_time}\n\nDaily Free Usage:\n{daily_used}/{daily_limit} (resets at 12:00 AM IST)__**"
+            )
     else:
         btn = [ 
             [InlineKeyboardButton("Fʀᴇᴇ Tʀᴀɪʟ Fᴏʀ 𝟻 Mɪɴᴜᴛᴇꜱ 😜", callback_data="get_trail")],
@@ -1407,7 +1486,21 @@ async def check_plans_cmd(client, message):
         ]
         reply_markup = InlineKeyboardMarkup(btn)
         m=await message.reply_sticker("CAACAgIAAxkBAAIxq2jSBFmFCPWv4Fx8EODz8du8XtDuAALqGAACpTuJSqyiyv1WtTBrHgQ")         
-        await message.reply_text(f"**__😢 You Don't Have Any Premium Subscription.\n\n Check Out Our Premium /plan__**",reply_markup=reply_markup)
+        if lang == "hi":
+            text = (
+                f"**__😢 आपके पास कोई प्रीमियम सब्सक्रिप्शन नहीं है।\n\n"
+                f"Daily Free Usage: {daily_used}/{daily_limit}\n"
+                f"(IST 12:00 AM पर रीसेट)\n\n"
+                f"प्रीमियम देखने के लिए /plan भेजें।__**"
+            )
+        else:
+            text = (
+                f"**__😢 You don't have any premium subscription.\n\n"
+                f"Daily Free Usage: {daily_used}/{daily_limit}\n"
+                f"(resets at 12:00 AM IST)\n\n"
+                f"Check out our premium /plan__**"
+            )
+        await message.reply_text(text, reply_markup=reply_markup)
         await asyncio.sleep(2)
         await m.delete()
 
