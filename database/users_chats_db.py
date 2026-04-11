@@ -10,6 +10,7 @@ from info import (
 )
 import time
 import datetime
+import pytz
 
 my_client = MongoClient(OTHER_DB_URI)
 mydb = my_client["referal_user"]
@@ -67,6 +68,7 @@ class Database:
         self.grp = self.db.groups
         self.users = self.db.uersz
         self.bot = self.db.clone_bots
+        self.config = self.db.bot_config
 
 
     def new_user(self, id, name, username=None):   # ← added username field
@@ -314,6 +316,98 @@ class Database:
         # Returns the text tag
         user = await self.col.find_one({'id': int(id)})
         return user.get('metadata_tag', None)
+
+    # --- DAILY FREE LIMIT SETTINGS (IST Reset) ---
+
+    @staticmethod
+    def _ist_day_key():
+        ist_now = datetime.datetime.now(pytz.timezone("Asia/Kolkata"))
+        return ist_now.strftime("%Y-%m-%d")
+
+    async def get_daily_limit(self):
+        config = await self.config.find_one({"_id": "daily_limit_config"})
+        if not config:
+            return 28
+        return int(config.get("daily_limit", 28))
+
+    async def set_daily_limit(self, limit_value: int):
+        await self.config.update_one(
+            {"_id": "daily_limit_config"},
+            {"$set": {"daily_limit": int(limit_value)}},
+            upsert=True
+        )
+
+    async def _get_user_limit_data(self, user_id: int):
+        user = await self.col.find_one({"id": int(user_id)})
+        if not user:
+            return {"daily_used": 0, "daily_used_date": self._ist_day_key()}
+        saved_day = user.get("daily_used_date")
+        if saved_day != self._ist_day_key():
+            await self.col.update_one(
+                {"id": int(user_id)},
+                {"$set": {"daily_used": 0, "daily_used_date": self._ist_day_key()}}
+            )
+            return {"daily_used": 0, "daily_used_date": self._ist_day_key()}
+        return {
+            "daily_used": int(user.get("daily_used", 0)),
+            "daily_used_date": saved_day or self._ist_day_key()
+        }
+
+    async def get_user_daily_usage(self, user_id: int):
+        data = await self._get_user_limit_data(int(user_id))
+        return int(data.get("daily_used", 0))
+
+    async def increment_user_daily_usage(self, user_id: int, amount: int = 1):
+        await self._get_user_limit_data(int(user_id))
+        await self.col.update_one(
+            {"id": int(user_id)},
+            {
+                "$inc": {"daily_used": int(amount)},
+                "$set": {"daily_used_date": self._ist_day_key()}
+            },
+            upsert=True
+        )
+
+    async def reset_user_daily_usage(self, user_id: int):
+        await self.col.update_one(
+            {"id": int(user_id)},
+            {"$set": {"daily_used": 0, "daily_used_date": self._ist_day_key()}},
+            upsert=True
+        )
+
+    async def full_user_daily_usage(self, user_id: int):
+        limit_value = await self.get_daily_limit()
+        await self.col.update_one(
+            {"id": int(user_id)},
+            {"$set": {"daily_used": int(limit_value), "daily_used_date": self._ist_day_key()}},
+            upsert=True
+        )
+
+    async def get_all_users_limits(self):
+        limit_value = await self.get_daily_limit()
+        users_cursor = self.col.find({}, {"id": 1, "name": 1, "daily_used": 1, "daily_used_date": 1})
+        users_list = []
+        async for user in users_cursor:
+            user_id = int(user.get("id"))
+            used = await self.get_user_daily_usage(user_id)
+            users_list.append({
+                "id": user_id,
+                "name": user.get("name", "Unknown"),
+                "used": used,
+                "limit": limit_value
+            })
+        return users_list
+
+    async def set_user_language(self, user_id: int, language_code: str):
+        await self.col.update_one(
+            {"id": int(user_id)},
+            {"$set": {"bot_language": language_code}},
+            upsert=True
+        )
+
+    async def get_user_language(self, user_id: int):
+        user = await self.col.find_one({"id": int(user_id)})
+        return (user or {}).get("bot_language", "en")
     
 db = Database(USER_DB_URI, DATABASE_NAME)
 
